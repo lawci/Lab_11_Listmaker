@@ -9,8 +9,14 @@ public class ListMaker {
         boolean running = true;
 
         while (running) {
-            displayList();
-            String choice = SafeInput.getRegExString(scanner, "Enter your choice (A-add, D-delete, I-insert, P-print, Q-quit)", "[AaDdIiPpQq]");
+            System.out.println("\nMenu Options:");
+            System.out.println("A - Add an item to the list");
+            System.out.println("D - Delete an item from the list");
+            System.out.println("I - Insert an item into the list");
+            System.out.println("P - Print (display) the list");
+            System.out.println("Q - Quit the program");
+
+            String choice = SafeInput.getRegExString(scanner, "Enter your choice", "[AaDdIiPpQq]");
 
             switch (choice.toUpperCase()) {
                 case "A":
@@ -26,7 +32,7 @@ public class ListMaker {
                     displayList();
                     break;
                 case "Q":
-                    running = confirmQuit();
+                    running = !confirmQuit();
                     break;
                 default:
                     System.out.println("Invalid choice");
@@ -57,6 +63,7 @@ public class ListMaker {
             return;
         }
 
+        displayList(); // Show list before deletion
         int itemNum = SafeInput.getRangedInt(scanner, "Enter the item number to delete", 1, list.size());
         String removedItem = list.remove(itemNum - 1);
         System.out.printf("'%s' removed from the list%n", removedItem);
@@ -69,6 +76,7 @@ public class ListMaker {
             return;
         }
 
+        displayList(); // Show list before insertion
         int position = SafeInput.getRangedInt(scanner, "Enter the position to insert at", 1, list.size() + 1);
         String item = SafeInput.getNonZeroLenString(scanner, "Enter the item to insert");
         list.add(position - 1, item);
@@ -76,10 +84,6 @@ public class ListMaker {
     }
 
     private static boolean confirmQuit() {
-        boolean quit = SafeInput.getYNConfirm(scanner, "Are you sure you want to quit?");
-        if (quit) {
-            System.out.println("Goodbye!");
-        }
-        return !quit;
+        return SafeInput.getYNConfirm(scanner, "Are you sure you want to quit?");
     }
 }
